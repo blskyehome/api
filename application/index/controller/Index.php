@@ -5,6 +5,8 @@ class Index
 {
     public function index()
     {
-        return 'api';
+//        全局异常处理
+     return config('setting.img_prefix');
+
     }
 }

@@ -95,11 +95,11 @@ return [
     // 路由配置文件（支持配置多个）
     'route_config_file'      => ['route'],
     // 是否强制使用路由
-    'url_route_must'         => false,
+    'url_route_must'         => true,
     // 域名部署
-    'url_domain_deploy'      => false,
+    'url_domain_deploy'      => true,
     // 域名根，如thinkphp.cn
-    'url_domain_root'        => '',
+    'url_domain_root'        => 'blskye.dev',
     // 是否自动转换URL中的控制器和操作名
     'url_convert'            => true,
     // 默认的访问控制器层
@@ -158,7 +158,7 @@ return [
     // 显示错误信息
     'show_error_msg'         => false,
     // 异常处理handle类 留空使用 \think\exception\Handle
-    'exception_handle'       => '',
+    'exception_handle'       => 'app\lib\exception\ExceptionHandler',
 
     // +----------------------------------------------------------------------
     // | 日志设置

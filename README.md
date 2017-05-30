@@ -1,4 +1,4 @@
-ThinkPHP 5.0
+Blskye Api
 ===============
 
 [![Total Downloads](https://poser.pugx.org/topthink/think/downloads)](https://packagist.org/packages/topthink/think)
@@ -127,3 +127,10 @@ All rights reserved。
 ThinkPHP® 商标和著作权所有者为上海顶想信息科技有限公司。
 
 更多细节参阅 [LICENSE.txt](LICENSE.txt)
+
+##项目构建步骤
++   路由
++   参数校验
++   全局异常处理
+    +   配置全局异常处理 config  exception_handle'       => ''
+

@@ -9,13 +9,13 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-return [
-    '__pattern__' => [
-        'name' => '\w+',
-    ],
-    '[hello]'     => [
-        ':id'   => ['index/hello', ['method' => 'get'], ['id' => '\d+']],
-        ':name' => ['index/hello', ['method' => 'post']],
-    ],
+use think\Route;
 
-];
+//域名
+
+//api
+Route::domain('api',function (){
+    Route::get(':version/sample', 'api/:version.Sample/getSample');
+    Route::get(':version/banner/:id', 'api/:version.Banner/getBanner');
+});
+
