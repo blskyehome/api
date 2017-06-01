@@ -66,8 +66,10 @@ class BaseValidate extends Validate
             ]);
         }
         $newArray = [];
+//        var_dump($arrays);
         foreach ($this->rule as $key => $value) {
             $newArray[$key] = $arrays[$key];
+            $newArray['password']=salt_md5($arrays['password'],config('config.user_salt'));
         }
         return $newArray;
     }
@@ -102,6 +104,7 @@ class BaseValidate extends Validate
             return false;
         }
     }
+
     
 
 }

@@ -1,5 +1,6 @@
 <?php
 namespace app\api\controller\v1;
+use app\api\controller\BaseController;
 
 /**
  * Created by PhpStorm.
@@ -8,7 +9,7 @@ namespace app\api\controller\v1;
  * Time: 16:12
  * Description:
  */
-class Sample
+class Sample extends BaseController
 {
 
     public function getSample(){
