@@ -115,3 +115,21 @@ function salt_md5($value,$salt){
     return md5($value.$salt);
 }
 
+/**
+ * 根据url获取title
+ * @param $url
+ * @return mixed
+ */
+function get_url_title($url){
+    $lines_array = file($url);
+    $lines_string = implode('', $lines_array);
+    $pos = strpos($lines_string, 'utf-8');
+    if ($pos === false) {$lines_string = iconv("gbk", "utf-8", $lines_string);
+    }
+//    preg_match("<title>(.*)</title>", $lines_string, $title);
+    preg_match("/<title>(.*)<\/title>/i",$lines_string, $title);
+    if ($title[1] == "") {
+        $title[1] =$url;
+    }
+    return $title[1];
+}

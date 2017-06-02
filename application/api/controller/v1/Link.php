@@ -12,15 +12,23 @@ namespace app\api\controller\v1;
 
 use app\api\controller\BaseUserController;
 use app\api\validate\LinkNew;
+use app\model\Category;
+use app\model\UserToken;
 
 class Link extends BaseUserController
 {
-    public function createLink(){
-        $validate=new LinkNew();
+
+    /**
+     * 添加link
+     */
+    public function createLink()
+    {
+        $validate = new LinkNew();
         $validate->goCheck();
-
-
-
+        $data = $validate->getDataByRule(input('post.'));
+        $link = new \app\model\Link();
+        $data['user_id'] = $this->user_info->id;
+        $link->save($data);
     }
 
 }

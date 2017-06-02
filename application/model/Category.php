@@ -10,7 +10,8 @@
 namespace app\model;
 
 
-class Category
+class Category extends BaseModel
 {
+
 
 }

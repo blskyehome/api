@@ -17,7 +17,12 @@ use think\Db;
 
 class UserToken extends Token
 {
-
+    /**
+     * 获取用户令牌
+     * @param $data
+     * @return string
+     * @throws UserException
+     */
     public function get($data)
     {
 
@@ -57,6 +62,14 @@ class UserToken extends Token
 
     }
 
+    /**
+     *
+     * 在user_token 表中添加一条记录
+     * @param $user_id
+     * @param $token
+     * @param string $client_type
+     * @return false|int
+     */
     private function createUserToken($user_id, $token, $client_type = 'chrome')
     {
         $user_token_model = new UserTokenModel();
@@ -69,6 +82,12 @@ class UserToken extends Token
         );
         return $res;
     }
+
+    /**
+     * 更新最后一次获取令牌的时间（最后一次登录）
+     * @param $user_id
+     * @return $this
+     */
     private function updateUserLastLogin($user_id){
         $res=Users::where('id', $user_id)
             ->update(['last_login' => time()]);

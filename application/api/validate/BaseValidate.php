@@ -14,6 +14,7 @@ use app\lib\exception\BaseException;
 use app\lib\exception\ForbiddenException;
 use app\lib\exception\ParameterException;
 use app\lib\exception\TokenException;
+use app\model\UserToken;
 use think\Exception;
 use think\Request;
 use think\Validate;
@@ -36,7 +37,7 @@ class BaseValidate extends Validate
         //必须设置contetn-type:application/json
         $request = Request::instance();
         $params = $request->param();
-        $params['token'] = $request->header('token');
+//        $params['token'] = $request->header('token');
 
         if (!$this->check($params)) {
 //            最终版
@@ -69,11 +70,21 @@ class BaseValidate extends Validate
 //        var_dump($arrays);
         foreach ($this->rule as $key => $value) {
             $newArray[$key] = $arrays[$key];
-            $newArray['password']=salt_md5($arrays['password'],config('config.user_salt'));
+            if (array_key_exists('password', $arrays)){
+                $newArray['password']=salt_md5($arrays['password'],config('config.user_salt'));
+            }
         }
         return $newArray;
     }
 
+    /**
+     * 是否是正整数
+     * @param $value
+     * @param string $rule
+     * @param string $data
+     * @param string $field
+     * @return bool|string
+     */
     protected function isPositiveInteger($value, $rule='', $data='', $field='')
     {
         if (is_numeric($value) && is_int($value + 0) && ($value + 0) > 0) {
@@ -82,6 +93,14 @@ class BaseValidate extends Validate
         return $field . '必须是正整数';
     }
 
+    /**
+     * 是否为空
+     * @param $value
+     * @param string $rule
+     * @param string $data
+     * @param string $field
+     * @return bool|string
+     */
     protected function isNotEmpty($value, $rule='', $data='', $field='')
     {
         if (empty($value)) {
@@ -102,6 +121,54 @@ class BaseValidate extends Validate
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * 判断user token 是否存在
+     * @param $value
+     * @param string $rule
+     * @param string $data
+     * @param string $field
+     * @return bool
+     */
+    protected function isUserToken($value, $rule='', $data='', $field=''){
+        $result=UserToken::get(['token'=>$value]);
+        if ($result) {
+            return true;
+        } else {
+            return $field . ' 不正确';
+        }
+    }
+    protected function isUrl($value, $rule='', $data='', $field=''){
+        $result=filter_var($value, FILTER_VALIDATE_URL);
+        if ($result) {
+            return true;
+        } else {
+            return $field . '不是正确的url';
+        }
+    }
+
+    /**
+     * 验证分类id是否属于当前的token的用户
+     * @param $value
+     * @param string $rule
+     * @param string $data
+     * @param string $field
+     * @return bool|string
+     */
+    protected function isCategoryBelongToUser($value, $rule='', $data='', $field=''){
+
+        $request = Request::instance();
+        $params = $request->param();
+//        var_dump($params);
+        //验证分类id是否存在 是否属于当前用户
+        $token=UserToken::with(['categories'])->where(['token'=>$params['token']])->find();
+        $result=$token->categories()->find($params['category_id']);
+        if ($result) {
+            return true;
+        } else {
+            return $field . '不正确';
         }
     }
 

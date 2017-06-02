@@ -12,5 +12,13 @@ namespace app\model;
 
 class UserToken extends BaseModel
 {
+    public function  categories()
+    {
+        return $this->hasMany('Category','user_id','user_id');
+    }
 
+    public function users()
+    {
+        return $this->hasOne('Users','id','user_id');
+    }
 }

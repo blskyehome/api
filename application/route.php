@@ -30,6 +30,9 @@ Route::domain('api',function (){
 
     //创建link
     Route::post(':version/link', 'api/:version.Link/createLink');
+    //根据
+
+
 });
 Route::get('','index/Index/index');
 Route::get('test1','index/Index/test1');
