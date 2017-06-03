@@ -30,7 +30,13 @@ Route::domain('api',function (){
 
     //创建link
     Route::post(':version/link', 'api/:version.Link/createLink');
-    //根据
+    //获取link
+    Route::get(':version/user/:user_id/link','api/:version.Link/getLink');//获取某个用户的公共link
+    Route::get(':version/link','api/:version.Link/getLinkAll');//所有的公共link
+    Route::get(':version/user/link','api/:version.Link/getLinkByToken');//用户自己的link
+    //删除link
+    Route::delete(':version/link/:id','api/:version.Link/deleteLink');
+
 
 
 });

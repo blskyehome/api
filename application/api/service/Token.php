@@ -10,6 +10,12 @@
 namespace app\api\service;
 
 
+use app\lib\exception\ForbiddenException;
+use app\lib\exception\TokenException;
+use app\model\UserToken;
+use think\Exception;
+use think\Request;
+
 class Token
 {
     /**
@@ -22,6 +28,31 @@ class Token
         $timestamp = $_SERVER['REQUEST_TIME_FLOAT'];
         $tokenSalt = config('config.token_salt');
         return md5($randChar . $timestamp . $tokenSalt);
+    }
+
+    // 用户专有权限
+    public static function needExclusiveScope()
+    {
+        //验证token
+        $scope = self::getCurrentTokenVar();
+        if ($scope){
+           return true;
+        } else {
+            throw new TokenException(['msg'=>1]);
+        }
+    }
+    public static function getCurrentTokenVar()
+    {
+        $token = Request::instance()
+            ->param('token');
+        $vars = UserToken::get(['token'=>$token]);
+        if (!$vars)
+        {
+            throw new TokenException();
+        }
+        else {
+           return true;
+        }
     }
 
 }

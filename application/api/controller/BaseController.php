@@ -10,21 +10,37 @@
 namespace app\api\controller;
 
 
+use app\api\service\Token;
+use app\model\UserToken;
 use think\Controller;
 use think\Request;
+use app\api\validate\UserToken as UserTokenValidate;
+
 
 class BaseController extends Controller
 {
- public function __construct(Request $request)
- {
-     parent::__construct($request);
+    protected $user_info;
 
-     header('Access-Control-Allow-Origin: *');
-     header("Access-Control-Allow-Headers: token,Origin, X-Requested-With, Content-Type, Accept");
-     header('Access-Control-Allow-Methods: POST,GET');
-//     echo 123;
-     if(request()->isOptions()){
-         exit();
-     }
- }
+
+    /*需要用户自己登录才能查看*/
+    protected function checkExclusiveScope()
+    {
+        /*
+        * 验证器 验证token 是否传入 是否存在 如果存在则查找用户信息
+        * */
+//        var_dump(input('post.'));
+
+        $validate=new UserTokenValidate();
+        $validate->goCheck();
+        Token::needExclusiveScope();
+
+        $usertoken_model=new UserToken();
+
+        $request = Request::instance();
+        $params = $request->param();
+
+        $user_token=$usertoken_model->where(['token'=>$params['token']])->find();
+        $this->user_info=$user_token->users;
+    }
+
 }
