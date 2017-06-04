@@ -9,7 +9,6 @@
 namespace app\api\validate;
 
 use app\api\service\Token;
-use app\lib\enum\ScopeEnum;
 use app\lib\exception\BaseException;
 use app\lib\exception\ForbiddenException;
 use app\lib\exception\ParameterException;

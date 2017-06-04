@@ -17,6 +17,10 @@ class UserToken extends BaseModel
         return $this->hasMany('Category','user_id','user_id');
     }
 
+    public function  links()
+    {
+        return $this->hasMany('Link','user_id','user_id');
+    }
     public function users()
     {
         return $this->hasOne('Users','id','user_id');

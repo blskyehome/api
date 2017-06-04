@@ -10,7 +10,7 @@
 namespace app\api\validate;
 
 
-class LinkGet extends BaseValidate
+class Page extends BaseValidate
 {
     protected $rule=[
             'start'=>'isPositiveInteger',

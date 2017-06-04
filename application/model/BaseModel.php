@@ -16,7 +16,7 @@ use traits\model\SoftDelete;
 class BaseModel extends Model
 {
     use SoftDelete;
-    protected $hidden = ['update_time'];
+    protected $hidden = ['update_time','delete_time'];
     protected $autoWriteTimestamp = true;
 
 }
