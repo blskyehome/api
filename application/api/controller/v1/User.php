@@ -14,10 +14,21 @@ use app\api\controller\BaseController;
 use app\api\validate\UserNew;
 use app\lib\exception\BaseException;
 use app\lib\exception\SuccessMessage;
+use app\lib\tools\SendMail;
 use app\model\Users as UserModel;
+use app\api\validate\SendMail as SendMailValidate;
+use PHPMailer;
+use Swift_Mailer;
+use Swift_Message;
+use Swift_SmtpTransport;
+use think\Cache;
+use think\Exception;
 
 class User extends BaseController
 {
+    protected $beforeActionList = [
+        'checkExclusiveScope' => ['only' => 'updateProfile']
+    ];
 
     /*
      * 创建一个用户
@@ -65,5 +76,13 @@ class User extends BaseController
     }
     public function updateProfile(){
         return 2;
+    }
+    public function sendCaptcha(){
+        $validate=new SendMailValidate();
+        $validate->goCheck();
+        $data=$validate->getDataByRule(input('post.'));
+        $sendMail=new SendMail($data['email']);
+        $result=$sendMail->sendCaptchaMail();
+        return json($result);
     }
 }

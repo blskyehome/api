@@ -21,6 +21,8 @@ Route::domain('api', function () {
 
     //创建(注册)用户
     Route::post(':version/user', 'api/:version.User/createUser');
+    //发送验证码
+    Route::post(':version/user/captcha', 'api/:version.User/sendCaptcha');
     //获取token
     Route::post(':version/token/user', 'api/:version.Token/getToken');
     //通过新浪获取token
@@ -66,6 +68,7 @@ Route::domain('api', function () {
 
     //删除link
     Route::delete(':version/link/:id', 'api/:version.Link/deleteLink');
+    Route::get(':version/email','api/:version.User/sendEMail');
 
 });
 Route::get('', 'index/Index/index');
