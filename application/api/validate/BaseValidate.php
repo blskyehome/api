@@ -14,6 +14,7 @@ use app\lib\exception\ForbiddenException;
 use app\lib\exception\ParameterException;
 use app\lib\exception\TokenException;
 use app\model\UserToken;
+use think\Cache;
 use think\Exception;
 use think\Request;
 use think\Validate;
@@ -171,6 +172,19 @@ class BaseValidate extends Validate
         }
     }
 
+    protected function isCaptchaBelongToMail($value, $rule='', $data='', $field=''){
+
+        $request = Request::instance();
+        $params = $request->param();
+
+        $result=Cache::get($params['email']);
+
+        if ($result==strtoupper($value)) {
+            return true;
+        } else {
+            return  '验证码不正确';
+        }
+    }
     
 
 }

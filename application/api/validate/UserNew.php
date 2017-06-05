@@ -19,23 +19,11 @@ class UserNew extends BaseValidate
 
     protected $rule=[
         'email'=>'require|email|unique:users|isNotEmpty',
-        'user_name'=>'require|unique:users|isNotEmpty',// unique 可检测是否在数据库中存在
+        'user_name'=>'require|isNotEmpty|chsDash|length:3,25|unique:users',// unique 可检测是否在数据库中存在
         'password'=>'require|isNotEmpty',
         'captcha'=>'require|isNotEmpty|isCaptchaBelongToMail'
     ];
-    protected function isCaptchaBelongToMail($value, $rule='', $data='', $field=''){
 
-        $request = Request::instance();
-        $params = $request->param();
-
-        $result=Cache::get($params['email']);
-
-        if ($result==strtoupper($value)) {
-            return true;
-        } else {
-            return  '验证码不正确';
-        }
-    }
     public function getDataByRule($arrays){
         $newArray = [];
         if (array_key_exists('password', $arrays)){

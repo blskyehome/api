@@ -11,18 +11,16 @@ namespace app\api\controller\v1;
 
 
 use app\api\controller\BaseController;
+use app\api\validate\ModifyPassword;
+use app\api\validate\ModifyProfile;
 use app\api\validate\UserNew;
 use app\lib\exception\BaseException;
 use app\lib\exception\SuccessMessage;
 use app\lib\tools\SendMail;
 use app\model\Users as UserModel;
 use app\api\validate\SendMail as SendMailValidate;
-use PHPMailer;
-use Swift_Mailer;
-use Swift_Message;
-use Swift_SmtpTransport;
-use think\Cache;
-use think\Exception;
+use app\model\Users;
+
 
 class User extends BaseController
 {
@@ -49,7 +47,9 @@ class User extends BaseController
 
         throw new SuccessMessage();
     }
-    public function uploadAvatar(){
+
+    public function uploadAvatar()
+    {
 
         var_dump($_POST);
         exit();
@@ -57,8 +57,8 @@ class User extends BaseController
         // 获取表单上传文件 例如上传了001.jpg
         $file = request()->file('image');
         // 移动到框架应用根目录/public/uploads/ 目录下
-        $info = $file->validate(['size'=>156789,'ext'=>'jpg,png,gif'])->move(ROOT_PATH . 'public' . DS . 'uploads');
-        if($info){
+        $info = $file->validate(['size' => 156789, 'ext' => 'jpg,png,gif'])->move(ROOT_PATH . 'public' . DS . 'uploads');
+        if ($info) {
             // 成功上传后 获取上传信息
             // 输出 jpg
             echo $info->getExtension();
@@ -66,23 +66,43 @@ class User extends BaseController
             echo $info->getSaveName();
             // 输出 42a79759f284b767dfcb2a0197904287.jpg
             echo $info->getFilename();
-        }else{
+        } else {
             // 上传失败获取错误信息
             echo $file->getError();
         }
     }
-    public function updatePassword(){
-        return 1;
-    }
-    public function updateProfile(){
-        return 2;
-    }
-    public function sendCaptcha(){
-        $validate=new SendMailValidate();
+
+    public function updatePassword()
+    {
+        $validate = new ModifyPassword();
         $validate->goCheck();
-        $data=$validate->getDataByRule(input('post.'));
-        $sendMail=new SendMail($data['email']);
-        $result=$sendMail->sendCaptchaMail();
+        $data = $validate->getDataByRule(input('put.'));
+        $res = Users::update(
+            ['password' => salt_md5($data['password'],config('config.user_salt'))],
+            ['email' => $data['email']]
+        );
+        return json($res);
+    }
+
+    public function updateProfile()
+    {
+        $validate = new ModifyProfile();
+        $validate->goCheck();
+        $data = $validate->getDataByRule(input('put.'));
+        $res = Users::update(
+            ['user_name' => $data['user_name']],
+            ['id' => $this->user_info->id]
+        );
+        return json($res);
+    }
+
+    public function sendCaptcha()
+    {
+        $validate = new SendMailValidate();
+        $validate->goCheck();
+        $data = $validate->getDataByRule(input('post.'));
+        $sendMail = new SendMail($data['email']);
+        $result = $sendMail->sendCaptchaMail();
         return json($result);
     }
 }
