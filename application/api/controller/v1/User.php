@@ -11,11 +11,14 @@ namespace app\api\controller\v1;
 
 
 use app\api\controller\BaseController;
+use app\api\service\Image;
 use app\api\validate\ModifyPassword;
 use app\api\validate\ModifyProfile;
+use app\api\validate\UploadFile;
 use app\api\validate\UserNew;
 use app\lib\exception\BaseException;
 use app\lib\exception\SuccessMessage;
+use app\lib\tools\Base64Decode;
 use app\lib\tools\SendMail;
 use app\model\Users as UserModel;
 use app\api\validate\SendMail as SendMailValidate;
@@ -25,7 +28,7 @@ use app\model\Users;
 class User extends BaseController
 {
     protected $beforeActionList = [
-        'checkExclusiveScope' => ['only' => 'updateProfile']
+        'checkExclusiveScope' => ['only' => 'updateProfile,uploadAvatar,getUserInfo']
     ];
 
     /*
@@ -50,26 +53,12 @@ class User extends BaseController
 
     public function uploadAvatar()
     {
+        (new UploadFile())->goCheck();
+        $base64=input('post.file');
+       $res =Image::uploadAvatar($base64,$this->user_info->id);
 
-        var_dump($_POST);
-        exit();
+        return json($res);
 
-        // 获取表单上传文件 例如上传了001.jpg
-        $file = request()->file('image');
-        // 移动到框架应用根目录/public/uploads/ 目录下
-        $info = $file->validate(['size' => 156789, 'ext' => 'jpg,png,gif'])->move(ROOT_PATH . 'public' . DS . 'uploads');
-        if ($info) {
-            // 成功上传后 获取上传信息
-            // 输出 jpg
-            echo $info->getExtension();
-            // 输出 20160820/42a79759f284b767dfcb2a0197904287.jpg
-            echo $info->getSaveName();
-            // 输出 42a79759f284b767dfcb2a0197904287.jpg
-            echo $info->getFilename();
-        } else {
-            // 上传失败获取错误信息
-            echo $file->getError();
-        }
     }
 
     public function updatePassword()
@@ -103,6 +92,10 @@ class User extends BaseController
         $data = $validate->getDataByRule(input('post.'));
         $sendMail = new SendMail($data['email']);
         $result = $sendMail->sendCaptchaMail();
+        return json($result);
+    }
+    public function getUserInfo(){
+        $result=Users::getUserById($this->user_info->id);
         return json($result);
     }
 }

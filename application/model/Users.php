@@ -13,6 +13,11 @@ namespace app\model;
 class Users extends BaseModel
 {
 
+    protected $hidden=['id','last_login','password','delete_time','update_time','create_time'];
+    public function avatarImage()
+    {
+        return $this->hasOne('Image','id','avatar');
+    }
     /**
      * 手机号、用户名、邮箱 是否存在
      * @param $data
@@ -65,6 +70,10 @@ class Users extends BaseModel
                     $user=self::get($arrays);
             }
         }
+        return $user;
+    }
+    public static function getUserById($id){
+        $user=self::with(['avatarImage'])->find($id);
         return $user;
     }
 

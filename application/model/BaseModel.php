@@ -18,5 +18,11 @@ class BaseModel extends Model
     use SoftDelete;
     protected $hidden = ['update_time','delete_time'];
     protected $autoWriteTimestamp = true;
-
+    protected function  prefixImgUrl($value, $data){
+        $finalUrl = $value;
+        if($data['from'] == 1){
+            $finalUrl = config('setting.img_prefix').$value;
+        }
+        return $finalUrl;
+    }
 }

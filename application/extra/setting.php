@@ -7,6 +7,6 @@
  * Description:自定义配置文件
  */
 return [
-    'img_prefix'=>'http://blskye.com',
+    'img_prefix'=>'http://blskye.dev/',
     'captcha_expire_in'=>'3600'
 ];

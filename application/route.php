@@ -21,6 +21,9 @@ Route::domain('api', function () {
 
     //创建(注册)用户
     Route::post(':version/user', 'api/:version.User/createUser');
+    //getUserInfo
+    Route::get(':version/user', 'api/:version.User/getUserInfo');
+
     //发送验证码
     Route::post(':version/user/captcha', 'api/:version.User/sendCaptcha');
     //获取token
