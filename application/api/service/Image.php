@@ -10,6 +10,7 @@
 namespace app\api\service;
 
 
+use app\lib\exception\FileUploadException;
 use app\lib\tools\Base64Decode;
 use app\model\Users;
 use think\Db;
@@ -22,6 +23,7 @@ class Image
      * @param $base64
      * @param $user_id
      * @return bool
+     * @throws FileUploadException
      */
     public static function uploadAvatar($base64,$user_id){
         /*转换成图片 放到规定文件夹*/
@@ -36,9 +38,12 @@ class Image
             $user_model->update(['avatar'=>$image_model->id],['id'=>$user_id]);
             // 提交事务
             Db::commit();
-        } catch (\Exception $e) {
+        } catch (FileUploadException $e) {
             // 回滚事务
             Db::rollback();
+            throw new FileUploadException(
+                ['msg'=>'头像上传失败,重新尝试']
+            );
         }
         return true;
     }

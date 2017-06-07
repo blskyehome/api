@@ -14,7 +14,9 @@ use app\api\controller\BaseController;
 use app\api\validate\CategoryNew;
 use app\api\validate\IDMustBePositiveInt;
 use app\api\validate\Page;
+use app\lib\exception\BaseException;
 use app\lib\exception\MissException;
+use app\lib\exception\SuccessMessage;
 use app\model\Category as CategoryModel;
 use think\Request;
 
@@ -33,7 +35,12 @@ class Category extends BaseController
         $category_model = new CategoryModel();
         $data['user_id'] = $this->user_info->id;
         $res=$category_model->save($data);
-        return json($res);
+        if (!$res) {
+            throw new BaseException();
+        }
+        throw new SuccessMessage(
+            ['msg'=>'分类创建成功']
+        );
 
     }
     public function getCategoryByToken($page = 1, $size = 10, $keyword = '', $order = 'desc'){
@@ -60,7 +67,13 @@ class Category extends BaseController
         if (!$category) {
             throw new MissException();
         }
-        return CategoryModel::destroy($id);
+        $res= CategoryModel::destroy($id);
+        if (!$res) {
+            throw new BaseException();
+        }
+        throw new SuccessMessage(
+            ['code'=>202,'msg'=>'删除成功']
+        );
     }
     public function updateCategory($id){
         $validate = new CategoryNew();
@@ -72,8 +85,12 @@ class Category extends BaseController
         $where=['user_id' => $this->user_info->id,'id'=>$id];
         $res = CategoryModel::update($data, $where);
 
-        return json($res);
-
+        if (!$res){
+            throw new BaseException();
+        }
+        throw new SuccessMessage(
+            ['code'=>202,'msg'=>'更新成功']
+        );
 
     }
 }

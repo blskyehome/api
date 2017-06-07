@@ -13,6 +13,6 @@ namespace app\api\validate;
 class SendMail extends BaseValidate
 {
     protected $rule=[
-        'email'=>'require|isNotEmpty|unique:users'
+        'email'=>'require|email|isNotEmpty|unique:users'
     ];
 }

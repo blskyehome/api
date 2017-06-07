@@ -65,6 +65,7 @@ class SendMail
      * 发送验证码邮件
      * @param string $subject
      * @return mixed
+     * @throws Exception
      */
     public function sendCaptchaMail( $subject='来自Blskye的验证码'){
         $rand_char=strtoupper(getRandChar(4));
@@ -73,6 +74,12 @@ class SendMail
         ';
         $this->send($subject,$body);
         $result = cache($this->to, $rand_char,config('setting.captcha_expire_in'));
+        if (!$result){
+            throw new Exception([
+                'msg' => '服务器缓存异常',
+                'errorCode' => 10005
+            ]);
+        }
         return $result;
     }
 }

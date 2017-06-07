@@ -17,6 +17,7 @@ use app\api\validate\ModifyProfile;
 use app\api\validate\UploadFile;
 use app\api\validate\UserNew;
 use app\lib\exception\BaseException;
+use app\lib\exception\FileUploadException;
 use app\lib\exception\SuccessMessage;
 use app\lib\tools\Base64Decode;
 use app\lib\tools\SendMail;
@@ -47,17 +48,23 @@ class User extends BaseController
         if (!$result) {
             throw new BaseException();
         }
-
-        throw new SuccessMessage();
+        throw new SuccessMessage(
+            ['msg'=>'用户创建成功']
+        );
     }
 
     public function uploadAvatar()
     {
         (new UploadFile())->goCheck();
         $base64=input('post.file');
-       $res =Image::uploadAvatar($base64,$this->user_info->id);
+        $res =Image::uploadAvatar($base64,$this->user_info->id);
+        if (!$res){
+            throw new FileUploadException();
+        }
+        throw new SuccessMessage(
+            ['code'=>202,'msg'=>'头像上传成功']
 
-        return json($res);
+        );
 
     }
 
@@ -70,7 +77,13 @@ class User extends BaseController
             ['password' => salt_md5($data['password'],config('config.user_salt'))],
             ['email' => $data['email']]
         );
-        return json($res);
+        if (!$res){
+            throw new BaseException();
+        }
+        throw new SuccessMessage(
+            ['code'=>202,'msg'=>'密码更新成功']
+
+        );
     }
 
     public function updateProfile()
@@ -82,7 +95,14 @@ class User extends BaseController
             ['user_name' => $data['user_name']],
             ['id' => $this->user_info->id]
         );
-        return json($res);
+        if (!$res){
+            throw new BaseException();
+        }
+        throw new SuccessMessage(
+            ['code'=>202,'msg'=>'个人信息更新成功']
+
+        );
+
     }
 
     public function sendCaptcha()
@@ -92,7 +112,12 @@ class User extends BaseController
         $data = $validate->getDataByRule(input('post.'));
         $sendMail = new SendMail($data['email']);
         $result = $sendMail->sendCaptchaMail();
-        return json($result);
+        if (!$result){
+            throw new BaseException();
+        }
+        throw new SuccessMessage(
+            ['msg'=>'邮件发送成功']
+        );
     }
     public function getUserInfo(){
         $result=Users::getUserById($this->user_info->id);

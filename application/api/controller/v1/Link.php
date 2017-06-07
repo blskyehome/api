@@ -16,8 +16,10 @@ use app\api\validate\IDMustBePositiveInt;
 use app\api\validate\Page;
 use app\api\validate\LinkNew;
 use app\api\validate\LinkUpdate;
+use app\lib\exception\BaseException;
 use app\lib\exception\MissException;
 
+use app\lib\exception\SuccessMessage;
 use app\model\Link as LinkModel;
 use think\Request;
 
@@ -38,7 +40,12 @@ class Link extends BaseController
         $link = new LinkModel();
         $data['user_id'] = $this->user_info->id;
         $res = $link->save($data);
-        return json($res);
+        if (!$res) {
+            throw new BaseException();
+        }
+        throw new SuccessMessage(
+            ['msg'=>'链接添加成功']
+        );
     }
 
     /*获取某个用户的公共link*/
@@ -135,7 +142,13 @@ class Link extends BaseController
         if (!$link) {
             throw new MissException();
         }
-        return LinkModel::destroy($id);
+        $res= LinkModel::destroy($id);
+        if (!$res){
+            throw new BaseException();
+        }
+        throw new SuccessMessage(
+            ['code'=>202,'msg'=>'删除成功']
+        );
     }
 
     /*更改*/
@@ -155,7 +168,12 @@ class Link extends BaseController
         ];
         $where = ['user_id' => $this->user_info->id, 'id' => $id];
         $res = LinkModel::update($data, $where);
-        return json($res);
+        if (!$res){
+            throw new BaseException();
+        }
+        throw new SuccessMessage(
+            ['code'=>202,'msg'=>'更新成功']
+        );
     }
 
 
@@ -167,7 +185,12 @@ class Link extends BaseController
         $validate->goCheck();
         $link_model = new LinkModel();
         $res=$link_model->where('id','=',$id)->setInc('clicks');
-        return json($res);
+        if (!$res){
+            throw new BaseException();
+        }
+        throw new SuccessMessage(
+            ['code'=>202,'msg'=>'更新成功']
+        );
     }
 
 }

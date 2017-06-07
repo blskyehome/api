@@ -10,6 +10,8 @@
 namespace app\lib\tools;
 
 
+use app\lib\exception\Base64DecodeException;
+use app\lib\exception\FileUploadException;
 use think\Exception;
 
 class Base64Decode
@@ -40,18 +42,13 @@ class Base64Decode
             $type = $result[2];
             $new_file = "{$this->file_location}/{$this->file_name}.{$type}";
             if (file_put_contents($new_file, base64_decode(str_replace($result[1], '', $this->base64)))){
-//                echo '新文件保存成功：', $new_file;
                 return $new_file;
             }
             else{
-                throw new Exception(
-                    '上传失败'
-                );
+                throw new FileUploadException();
             }
         }else {
-            throw new Exception(
-                'base64有误'
-            );
+            throw new Base64DecodeException();
         }
     }
 
