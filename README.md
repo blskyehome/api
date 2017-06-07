@@ -1,5 +1,5 @@
-
-
+Blskye  Api
+=============
 ### 返回错误格式
 ```json
     {
@@ -37,28 +37,82 @@
 
 -   上传头像
     `POST /avatar`
+     
+    | 参数          |    含义    | 备注 |
+    | ----------    | ---       |-----|
+    | file         |  dataURL base64     | * |
 -   更改用户信息
-    `PUT  /user/profile` 
+    `PUT  /user/profile`
+       
+    | 参数          |    含义    | 备注 |
+    | ----------    | ---       |-----|
+    | user_name         |  新用户名   |  |
 -   创建分类
     `POST /category`
+       
+    | 参数          |    含义    | 备注 |
+    | ----------    | ---       |-----|
+    | name         |  分类名   | * |
 -   分类查询
     `GET /user/category`
+    | 参数          |    含义    | 备注 |
+    | ----------    | ---       |-----|
+    | page         |  页码   |  |
+    | size         |  单页条数   |  |
+    | keyword         |  关键词   |  |
+    | order      |  排序   |  |
+
 -   删除分类
-    DELETE
+    `DELETE /category/:id`
+    
 -   修改分类
-    PUT
+    `PUT /category/:id`
+     | 参数          |    含义    | 备注 |
+        | ----------    | ---       |-----|
+        | name         |  分类名   | * |
 -   创建link
-    POST
+    `POST /link`
+    | 参数          |    含义    | 备注 |
+    | ----------    | ---       |-----|
+    | openness         |  公开度   | * |
+    | category_id         |  用户分类id   | * |
+    | title         |  标题   |  |
+    | url         |  链接   | * |
+    | comment         |  注释   |  |
+
+    
 -   获取用户自己的link
-    GET
+    `GET /user/link`
+     | 参数          |    含义    | 备注 |
+        | ----------    | ---       |-----|
+        | page         |  页码   |  |
+        | size         |  单页条数   |  |
+        | keyword         |  关键词   |  |
+        | order      |  排序   |  |
+
 -   获取用户某个分类下所有的link
-    GET
+    `GET /user/category/:category_id/link`
+     | 参数          |    含义    | 备注 |
+        | ----------    | ---       |-----|
+        | page         |  页码   |  |
+        | size         |  单页条数   |  |
+        | keyword         |  关键词   |  |
+        | order      |  排序   |  |
+
 -   用户修改link
-    PUT
+    `PUT /link/:id`
+     | 参数          |    含义    | 备注 |
+        | ----------    | ---       |-----|
+        |     id     | id    | * |
+        | openness         |  公开度   |  |
+        | category_id         |  用户分类id   |  |
+        | title         |  标题   |  |
+        | url         |  链接   |  |
+        | comment         |  注释   |  |
 -   用户删除link
-    DELETE
+    `DELETE /link/:id`
 -   获取用户信息
-    GET
+    `GET /user`
 
 
 ####    不需要token
