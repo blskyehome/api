@@ -51,7 +51,7 @@
 ####    不需要token
 
 -   创建用户
-    POST http://api.blskye.com/v1/user
+    >   POST http://api.blskye.com/v1/user
     
     | 参数          |    含义    | 备注 |
     | ----------    | ---       |-----|
@@ -62,7 +62,7 @@
 
 -   用户获取token
 -   发送验证码
-    POST /v1/user/captcha
+   >    POST /v1/user/captcha
     
     | 参数          |    含义    | 备注 |
     | ----------    | ---       |-----|
