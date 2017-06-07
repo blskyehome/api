@@ -87,34 +87,34 @@ Blskye  Api
 -   获取用户自己的link
     `GET /user/link`
     
-     | 参数          |    含义    | 备注 |
-        | ----------    | ---       |-----|
-        | page         |  页码   |  |
-        | size         |  单页条数   |  |
-        | keyword         |  关键词   |  |
-        | order      |  排序   |  |
+    | 参数          |    含义    | 备注 |
+    | ----------    | ---       |-----|
+    | page         |  页码   |  |
+    | size         |  单页条数   |  |
+    | keyword         |  关键词   |  |
+    | order      |  排序   |  |
 
 -   获取用户某个分类下所有的link
     `GET /user/category/:category_id/link`
     
      | 参数          |    含义    | 备注 |
-        | ----------    | ---       |-----|
-        | page         |  页码   |  |
-        | size         |  单页条数   |  |
-        | keyword         |  关键词   |  |
-        | order      |  排序   |  |
+    | ----------    | ---       |-----|
+    | page         |  页码   |  |
+    | size         |  单页条数   |  |
+    | keyword         |  关键词   |  |
+    | order      |  排序   |  |
 
 -   用户修改link
     `PUT /link/:id`
     
      | 参数          |    含义    | 备注 |
-        | ----------    | ---       |-----|
-        |     id     | id    | * |
-        | openness         |  公开度   |  |
-        | category_id         |  用户分类id   |  |
-        | title         |  标题   |  |
-        | url         |  链接   |  |
-        | comment         |  注释   |  |
+    | ----------    | ---       |-----|
+    |     id     | id    | * |
+    | openness         |  公开度   |  |
+    | category_id         |  用户分类id   |  |
+    | title         |  标题   |  |
+    | url         |  链接   |  |
+    | comment         |  注释   |  |
 -   用户删除link
     `DELETE /link/:id`
 -   获取用户信息
@@ -152,11 +152,11 @@ Blskye  Api
 -   更改密码
     `PUT /user/password`
     
-        | 参数          |    含义    | 备注 |
-        | ----------    | ---       |-----|
-        | email         |  邮箱     | * |
-        | password      |  新密码      | * |
-        | captcha       |  验证码      | * |
+    | 参数          |    含义    | 备注 |
+    | ----------    | ---       |-----|
+    | email         |  邮箱     | * |
+    | password      |  新密码      | * |
+    | captcha       |  验证码      | * |
 
 -   获取某个用户的公共link
     `GET /user/:user_id/link`
