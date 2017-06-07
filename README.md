@@ -36,22 +36,35 @@
 ####    需要token
 
 -   上传头像
--   更改用户名
+    `POST /avatar`
+-   更改用户信息
+    `PUT  /user/profile` 
 -   创建分类
+    `POST /category`
 -   分类查询
+    `GET /user/category`
 -   删除分类
+    DELETE
 -   修改分类
+    PUT
 -   创建link
+    POST
 -   获取用户自己的link
+    GET
 -   获取用户某个分类下所有的link
+    GET
 -   用户修改link
+    PUT
+-   用户删除link
+    DELETE
 -   获取用户信息
+    GET
 
 
 ####    不需要token
 
 -   创建用户
-    >   POST http://api.blskye.com/v1/user
+    POST /user
     
     | 参数          |    含义    | 备注 |
     | ----------    | ---       |-----|
@@ -61,8 +74,15 @@
     | captcha       |  验证码    | * |
 
 -   用户获取token
+    POST /token/user
+     
+    | 参数          |    含义    | 备注 |
+    | ----------    | ---       |-----|
+    | user_name         |  邮箱/用户名/手机号      | * |
+    | password         |  用户密码      | * |
+
 -   发送验证码
-   >    POST /v1/user/captcha
+    POST /user/captcha
     
     | 参数          |    含义    | 备注 |
     | ----------    | ---       |-----|
@@ -70,7 +90,18 @@
     
    
 -   更改密码
+    PUT /user/password
+        | 参数          |    含义    | 备注 |
+        | ----------    | ---       |-----|
+        | email         |  邮箱     | * |
+        | password      |  新密码      | * |
+        | captcha       |  验证码      | * |
+
 -   获取某个用户的公共link
+    GET /user/:user_id/link
 -   获取所有用户的公告link
+    GET /link
 -   获取用户某个分类下公共的link
+    GET /user/:user_id/category/:category_id/link
 -   link点击率
+    PUT /link/:id/clicks
