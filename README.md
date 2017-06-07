@@ -68,11 +68,13 @@ Blskye  Api
     
 -   修改分类
     `PUT /category/:id`
+    
      | 参数          |    含义    | 备注 |
         | ----------    | ---       |-----|
         | name         |  分类名   | * |
 -   创建link
     `POST /link`
+    
     | 参数          |    含义    | 备注 |
     | ----------    | ---       |-----|
     | openness         |  公开度   | * |
@@ -84,6 +86,7 @@ Blskye  Api
     
 -   获取用户自己的link
     `GET /user/link`
+    
      | 参数          |    含义    | 备注 |
         | ----------    | ---       |-----|
         | page         |  页码   |  |
@@ -93,6 +96,7 @@ Blskye  Api
 
 -   获取用户某个分类下所有的link
     `GET /user/category/:category_id/link`
+    
      | 参数          |    含义    | 备注 |
         | ----------    | ---       |-----|
         | page         |  页码   |  |
@@ -102,6 +106,7 @@ Blskye  Api
 
 -   用户修改link
     `PUT /link/:id`
+    
      | 参数          |    含义    | 备注 |
         | ----------    | ---       |-----|
         |     id     | id    | * |
@@ -119,7 +124,7 @@ Blskye  Api
 ####    不需要token
 
 -   创建用户
-    POST /user
+    `POST /user`
     
     | 参数          |    含义    | 备注 |
     | ----------    | ---       |-----|
@@ -129,7 +134,7 @@ Blskye  Api
     | captcha       |  验证码    | * |
 
 -   用户获取token
-    POST /token/user
+    `POST /token/user`
      
     | 参数          |    含义    | 备注 |
     | ----------    | ---       |-----|
@@ -137,7 +142,7 @@ Blskye  Api
     | password         |  用户密码      | * |
 
 -   发送验证码
-    POST /user/captcha
+    `POST /user/captcha`
     
     | 参数          |    含义    | 备注 |
     | ----------    | ---       |-----|
@@ -145,7 +150,8 @@ Blskye  Api
     
    
 -   更改密码
-    PUT /user/password
+    `PUT /user/password`
+    
         | 参数          |    含义    | 备注 |
         | ----------    | ---       |-----|
         | email         |  邮箱     | * |
@@ -153,10 +159,10 @@ Blskye  Api
         | captcha       |  验证码      | * |
 
 -   获取某个用户的公共link
-    GET /user/:user_id/link
+    `GET /user/:user_id/link`
 -   获取所有用户的公告link
-    GET /link
+   `GET /link`
 -   获取用户某个分类下公共的link
-    GET /user/:user_id/category/:category_id/link
+   `GET /user/:user_id/category/:category_id/link`
 -   link点击率
-    PUT /link/:id/clicks
+   `PUT /link/:id/clicks`
