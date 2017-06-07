@@ -55,6 +55,7 @@ Blskye  Api
     | name         |  分类名   | * |
 -   分类查询
     `GET /user/category`
+    
     | 参数          |    含义    | 备注 |
     | ----------    | ---       |-----|
     | page         |  页码   |  |
