@@ -12,15 +12,22 @@ namespace app\model;
 
 class Link extends BaseModel
 {
-
+    public function category()
+    {
+        return $this->hasOne('Category','id','category_id');
+    }
     public function getLinkList($condition,$paginate = true, $page = 0,$size=0,$order = array(),$field = '*', $limit = 0)
     {
         $query= self::field($field)->where($condition)->order($order)->limit($limit);
         if ($paginate){
-            return $query->paginate($size, false, ['page' => $page]);
+            $res=$query->paginate($size, false, ['page' => $page]);
         }else{
-            return $query->select();
+            $res= $query->select();
         }
+        foreach ($res as $re){
+            $re['category']=$re->category;
+        }
+        return $res;
     }
 
     public static function getUserLinkByCategoryID(

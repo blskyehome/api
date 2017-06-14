@@ -18,13 +18,13 @@ class LinkNew extends BaseValidate
      *
      * 验证传来的分类id 是否存在 且
      * */
-    protected $rule=[
+    protected $rule = [
 //        'token'=>'require',
-        'openness'=>'require|isPositiveInteger',
-        'category_id'=>'require|isNotEmpty|isPositiveInteger|isCategoryBelongToUser',
-        'title'=>'max:100',// unique 可检测是否在数据库中存在
-        'url'=>'require|isNotEmpty|url',
-        'comment'=>'require'
+        'openness' => 'require|isPositiveInteger',
+        'category_id' => 'require|isNotEmpty|isPositiveInteger|isCategoryBelongToUser',
+        'title' => 'max:100',// unique 可检测是否在数据库中存在
+        'url' => 'require|isNotEmpty|url',
+        'comment' => 'require'
     ];
 
     public function getDataByRule($arrays)
@@ -39,8 +39,10 @@ class LinkNew extends BaseValidate
 //        var_dump($arrays);
         foreach ($this->rule as $key => $value) {
             $newArray[$key] = $arrays[$key];
-            if ($this->isNotEmpty($arrays['title'])!==true){
-                $newArray['title']=get_url_title($arrays['url']);
+            if (array_key_exists('title', $arrays)) {
+                if ($this->isNotEmpty($arrays['title']) !== true) {
+                    $newArray['title'] = get_url_title($arrays['url']);
+                }
             }
         }
         return $newArray;

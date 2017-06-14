@@ -44,7 +44,7 @@ class Link extends BaseController
             throw new BaseException();
         }
         throw new SuccessMessage(
-            ['msg'=>'链接添加成功']
+            ['msg'=>$link]
         );
     }
 

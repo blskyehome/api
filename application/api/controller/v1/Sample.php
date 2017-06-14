@@ -1,6 +1,7 @@
 <?php
 namespace app\api\controller\v1;
 use app\api\controller\BaseController;
+use app\model\Link;
 
 /**
  * Created by PhpStorm.
@@ -13,6 +14,13 @@ class Sample extends BaseController
 {
 
     public function getSample(){
-        return 1;
+        $link = new Link();
+
+        $condition['openness'] = 1;
+        $condition['user_id'] = 1;
+
+        $res = $link->getLinkList($condition, true);
+
+       return json($res);
     }
 }

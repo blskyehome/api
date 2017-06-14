@@ -51,12 +51,11 @@ class LinkUpdate extends BaseValidate
 
     protected function isLinkBelongToUser($value, $rule = '', $data = '', $field = '')
     {
-
         $request = Request::instance();
         $params = $request->param();
 //        var_dump($params);
         //验证分类id是否存在 是否属于当前用户
-        $token=UserToken::with(['categories'])->where(['token'=>$params['token']])->find();
+        $token=UserTokenModel::with(['categories'])->where(['token'=>$params['token']])->find();
         $result=$token->categories()->find($params['category_id']);
         if ($result) {
             return true;

@@ -16,7 +16,7 @@ class ModifyProfile extends BaseValidate
 {
 
     protected $rule=[
-        'user_name'=>'isNotEmpty|chsDash|length:3,25|unique:users'
+        'user_name'=>'require|isNotEmpty|chsDash|length:3,25|unique:users'
     ];
     public function getDataByRule($arrays){
         $newArray = [];
