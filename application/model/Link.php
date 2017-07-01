@@ -26,7 +26,9 @@ class Link extends BaseModel
         }
         foreach ($res as $re){
             $re['category']=$re->category;
+            $re['icon']='//'.get_domain($re['url']).'/favicon.ico';
         }
+//        favicon.ico
         return $res;
     }
 

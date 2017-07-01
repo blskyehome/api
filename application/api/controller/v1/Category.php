@@ -12,6 +12,7 @@ namespace app\api\controller\v1;
 
 use app\api\controller\BaseController;
 use app\api\validate\CategoryNew;
+use app\api\validate\CategoryUpdate;
 use app\api\validate\IDMustBePositiveInt;
 use app\api\validate\Page;
 use app\lib\exception\BaseException;
@@ -31,7 +32,11 @@ class Category extends BaseController
 
         $validate = new CategoryNew();
         $validate->goCheck();
-        $data = $validate->getDataByRule(input('post.'));
+        $params = Request::instance()->param();
+        $data = [
+           'name'=>$params['name'],
+		   'description'=>$params['description']
+        ];
         $category_model = new CategoryModel();
         $data['user_id'] = $this->user_info->id;
         $res=$category_model->save($data);
@@ -76,11 +81,12 @@ class Category extends BaseController
         );
     }
     public function updateCategory($id){
-        $validate = new CategoryNew();
+        $validate = new CategoryUpdate();
         $validate->goCheck();
         $params = Request::instance()->param();
         $data = [
-           'name'=>$params['name']
+           'name'=>$params['name'],
+            'description'=>$params['description']
         ];
         $where=['user_id' => $this->user_info->id,'id'=>$id];
         $res = CategoryModel::update($data, $where);

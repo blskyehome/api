@@ -60,6 +60,7 @@ Route::domain('api', function () {
     Route::get(':version/link', 'api/:version.Link/getLinkAll');//所有的公共link
 
     Route::get(':version/user/link', 'api/:version.Link/getLinkByToken');//用户自己的link
+    Route::get(':version/user/link/by_category', 'api/:version.Link/getLinkByCategory');//用户自己的link
 
     Route::get(':version/user/:user_id/category/:category_id/link', 'api/:version.Link/getUserLinkByCategoryID');//分类下公共的link
     Route::get(':version/user/category/:category_id/link', 'api/:version.Link/getUserLinkByCategoryIDAndToken');//分类下所有的

@@ -95,11 +95,9 @@ function getRandChar($length)
 }
 
 
-
-function fromArrayToModel($m , $array)
+function fromArrayToModel($m, $array)
 {
-    foreach ($array as $key => $value)
-    {
+    foreach ($array as $key => $value) {
         $m[$key] = $value;
     }
     return $m;
@@ -111,8 +109,9 @@ function fromArrayToModel($m , $array)
  * @param $salt
  * @return string
  */
-function salt_md5($value,$salt){
-    return md5($value.$salt);
+function salt_md5($value, $salt)
+{
+    return md5($value . $salt);
 }
 
 /**
@@ -120,17 +119,30 @@ function salt_md5($value,$salt){
  * @param $url
  * @return mixed
  */
-function get_url_title($url){
+function get_url_title($url)
+{
     $lines_array = file($url);
     $lines_string = implode('', $lines_array);
     $pos = strpos($lines_string, 'utf-8');
-    if ($pos === false) {$lines_string = iconv("gbk", "utf-8", $lines_string);
+    if ($pos === false) {
+        $lines_string = iconv("gbk", "utf-8", $lines_string);
     }
 //    preg_match("<title>(.*)</title>", $lines_string, $title);
-    preg_match("/<title>(.*)<\/title>/i",$lines_string, $title);
+    preg_match("/<title>(.*)<\/title>/i", $lines_string, $title);
     if ($title[1] == "") {
-        $title[1] =$url;
+        $title[1] = $url;
     }
     return $title[1];
+}
+
+/**
+ * @param $url
+ * @return mixed
+ */
+function get_domain($url)
+{
+    $tempu = parse_url($url);
+    $host = $tempu['host'];
+    return $host;
 }
 

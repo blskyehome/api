@@ -22,11 +22,12 @@ use app\lib\exception\MissException;
 use app\lib\exception\SuccessMessage;
 use app\model\Link as LinkModel;
 use think\Request;
+use app\model\Category as CategoryModel;
 
 class Link extends BaseController
 {
     protected $beforeActionList = [
-        'checkExclusiveScope' => ['only' => 'createLink,getLinkByToken,deleteLink,updateLink,getUserLinkByCategoryIDAndToken']
+        'checkExclusiveScope' => ['only' => 'createLink,getLinkByToken,deleteLink,updateLink,getUserLinkByCategoryIDAndToken,getLinkByCategory']
     ];
 
     /**
@@ -63,6 +64,7 @@ class Link extends BaseController
         return json($res);
     }
 
+
     /*获取某个用户所有的link*/
     public function getLinkByToken($page = 1, $size = 10, $keyword = '',$orderby='create_time', $order = 'desc')
     {
@@ -74,6 +76,29 @@ class Link extends BaseController
 
         $res = $link->getLinkList($condition, true, $page, $size, [$orderby => $order,]);
         return json($res);
+    }
+
+
+    public function getLinkByCategory(
+        $page = 1, $size = 10, $keyword = '',$orderby='create_time', $order = 'desc',
+        $page_link = 1, $size_link = 10, $keyword_link = '',$orderby_link='create_time', $order_link = 'desc'
+
+    ){
+        (new Page())->goCheck();
+        $category_model = new CategoryModel();
+
+        $condition['user_id'] = $this->user_info->id;
+        $condition['name'] = ['like', '%' . $keyword . '%'];
+
+        $category_list = $category_model->getCategoryList($condition, $page, $size, ['create_time' => $order,]);
+        $link = new LinkModel();
+        foreach ($category_list as $category){
+            $condition_link['category_id']=$category['id'];
+            $link_list = $link->getLinkList($condition_link, true, $page_link, $size_link, [$orderby_link => $order,]);
+            $category['link_list']=$link_list;
+        }
+        return json($category_list);
+
     }
 
     /*获取所有公共link*/
@@ -192,5 +217,7 @@ class Link extends BaseController
             ['code'=>202,'msg'=>'更新成功']
         );
     }
+
+
 
 }
