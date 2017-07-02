@@ -21,6 +21,8 @@ use app\lib\exception\FileUploadException;
 use app\lib\exception\SuccessMessage;
 use app\lib\tools\Base64Decode;
 use app\lib\tools\SendMail;
+use app\model\Category;
+use app\model\Link;
 use app\model\Users as UserModel;
 use app\api\validate\SendMail as SendMailValidate;
 use app\model\Users;
@@ -120,7 +122,22 @@ class User extends BaseController
         );
     }
     public function getUserInfo(){
-        $result=Users::getUserById($this->user_info->id);
+
+        $category_list=Category::getCategory('id,name',array('user_id'=>$this->user_info->id));
+        foreach ($category_list as $value =>$i){
+            //todo
+//            $category_list[$value['id']]['link_num']=Link::where(
+//                array(
+//                    'user_id'=>$this->user_info->id,
+//                    'category_id'=>$value['id']
+//                )
+//            )->count('id');
+        }
+        $result['user']=Users::getUserById($this->user_info->id);
+        $result['link_num']=Link::where('user_id', '=', $this->user_info->id)->count('id');
+        $result['category_num']=Category::where('user_id', '=', $this->user_info->id)->count('id');
+        $result['category_list']=$category_list;
+
         return json($result);
     }
 }

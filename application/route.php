@@ -74,6 +74,8 @@ Route::domain('api', function () {
     Route::delete(':version/link/:id', 'api/:version.Link/deleteLink');
     Route::get(':version/email','api/:version.User/sendEMail');
 
+
+
 });
 Route::get('', 'index/Index/index');
 Route::get('test1', 'index/Index/test1');

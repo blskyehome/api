@@ -17,4 +17,7 @@ class Category extends BaseModel
     {
         return self::field($field)->where($condition)->order($order)->limit($limit)->paginate($size, false, ['page' => $page]);
     }
+    public static function getCategory($field,$condition){
+        return self::field($field)->where($condition)->select();
+    }
 }
