@@ -10,13 +10,20 @@
 namespace app\api\controller\v1;
 
 
+use app\api\controller\BaseController;
 use app\api\service\UserToken;
 use app\api\validate\TokenGet;
+use app\lib\exception\BaseException;
+use app\lib\exception\MissException;
 use app\lib\exception\SuccessMessage;
 use app\model\Users;
+use think\Request;
 
-class Token
+class Token extends BaseController
 {
+    protected $beforeActionList = [
+        'checkExclusiveScope' => ['only' => 'deleteToken']
+    ];
 
     public function getToken($params=[]){
         /*
@@ -43,6 +50,29 @@ class Token
 
     public function getTokenBySina(){
 
+    }
+
+    public function deleteToken($token){
+        $validate=new \app\api\validate\UserToken();
+        $validate->goCheck();
+        $params = Request::instance()->param();
+        $token=$params['token'];
+        $condition = [
+            'user_id' => $this->user_info->id,
+            'token'=>$token
+        ];
+        $token_model=new \app\model\UserToken();
+        $user_token = $token_model->where($condition)->find();
+        if (!$user_token) {
+            throw new MissException();
+        }
+        $res= \app\model\UserToken::destroy($user_token['id']);
+        if (!$res){
+            throw new BaseException();
+        }
+        throw new SuccessMessage(
+            ['code'=>202,'msg'=>'删除成功']
+        );
     }
 
 }

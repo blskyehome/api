@@ -51,5 +51,24 @@ class Link extends BaseModel
         }
     }
 
+    /**
+     * 获取近几个月的link数量
+     * @param $month
+     * @param $user_id
+     * @return array
+     */
+    public static function getRecentMonthLinkSum($month,$user_id){
+        $link_sum=get_recent_months($month);//近6个月的起始时间戳
+        foreach ($link_sum as $key => $value){
+            $link_sum[$key]['sum']=Link::where(
+                array(
+                    'user_id'=>$user_id,
+                )
+            )->whereTime('create_time', 'between', [$value[0], $value[1]])->count('id');
+            $link_sum[$key]['month']=date('Y-m',$value[0]);
+        }
+        return $link_sum;
+    }
+
 
 }

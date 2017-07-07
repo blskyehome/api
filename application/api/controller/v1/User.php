@@ -25,7 +25,9 @@ use app\model\Category;
 use app\model\Link;
 use app\model\Users as UserModel;
 use app\api\validate\SendMail as SendMailValidate;
+use app\api\validate\SendMailBase as SendMailBaseValidate;
 use app\model\Users;
+use app\api\service\UserToken as UserTokenService;
 
 
 class User extends BaseController
@@ -50,8 +52,16 @@ class User extends BaseController
         if (!$result) {
             throw new BaseException();
         }
+        //生成令牌
+        $token=(new UserTokenService)->get(
+            array(
+                'flag'=>0,
+                'user_name'=>$data['user_name'],
+                'password'=>input('post.password') //因为data['password']是加密的
+            )
+        );
         throw new SuccessMessage(
-            ['msg'=>'用户创建成功']
+            ['msg'=>array('ok',$token)]
         );
     }
 
@@ -121,22 +131,51 @@ class User extends BaseController
             ['msg'=>'邮件发送成功']
         );
     }
+
+    public function sendCaptchaBase()
+    {
+        $validate = new SendMailBaseValidate();
+        $validate->goCheck();
+        $data = $validate->getDataByRule(input('post.'));
+        $sendMail = new SendMail($data['email']);
+        $result = $sendMail->sendCaptchaMail();
+        if (!$result){
+            throw new BaseException();
+        }
+        throw new SuccessMessage(
+            ['msg'=>'邮件发送成功']
+        );
+    }
+
+    /**
+     * 获取用户信息，需要优化
+     * @return \think\response\Json
+     */
     public function getUserInfo(){
 
         $category_list=Category::getCategory('id,name',array('user_id'=>$this->user_info->id));
-        foreach ($category_list as $value =>$i){
-            //todo
-//            $category_list[$value['id']]['link_num']=Link::where(
-//                array(
-//                    'user_id'=>$this->user_info->id,
-//                    'category_id'=>$value['id']
-//                )
-//            )->count('id');
-        }
         $result['user']=Users::getUserById($this->user_info->id);
         $result['link_num']=Link::where('user_id', '=', $this->user_info->id)->count('id');
         $result['category_num']=Category::where('user_id', '=', $this->user_info->id)->count('id');
+
+        foreach ($category_list as $key =>$value){
+            //todo
+            $category_list[$key]['link_num']=Link::where(
+                array(
+                    'user_id'=>$this->user_info->id,
+                    'category_id'=>$value['id']
+                )
+            )->count('id');
+            if ($result['link_num']!=0){
+                $category_list[$key]['proportion']=round($category_list[$key]['link_num']/$result['link_num'],2);
+            }else{
+                $category_list[$key]['proportion']=0;
+            }
+            $category_list[$key]['color']='#'.random_color();
+        }
+
         $result['category_list']=$category_list;
+        $result['month_sum']=Link::getRecentMonthLinkSum(6,$this->user_info->id);//获取最近6个月的统计link
 
         return json($result);
     }

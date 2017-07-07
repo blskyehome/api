@@ -146,3 +146,30 @@ function get_domain($url)
     return $host;
 }
 
+/**
+ * 获取随机颜色
+ * @return string
+ */
+function random_color(){
+    mt_srand((double)microtime()*1000000);
+    $c = '';
+    while(strlen($c)<6){
+        $c .= sprintf("%02X", mt_rand(0, 255));
+    }
+    return $c;
+}
+
+/**
+ * 获取最近几月 的起始时间戳
+ * @param int $month
+ * @return array
+ */
+function get_recent_months($month){
+    $arr = array();
+    $old_time = strtotime('-'.$month.' month');
+    for($i = 0;$i <= $month; ++$i){
+        $t = strtotime("+$i month",$old_time);
+        $arr[] = explode('/',strtotime(date('Y-m-01',$t)).'/'.strtotime(date('Y-m-',$t).date('t',$t)));
+    }
+    return $arr;
+}

@@ -8,5 +8,6 @@
  */
 return [
     'img_prefix'=>'http://api.blskye.dev/',
-    'captcha_expire_in'=>'3600'
+    'captcha_expire_in'=>'3600',
+    'default_img'=>'af820d064091a21ee3ceeb63628ea3ae.jpeg'
 ];

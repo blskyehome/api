@@ -26,8 +26,11 @@ Route::domain('api', function () {
 
     //发送验证码
     Route::post(':version/user/captcha', 'api/:version.User/sendCaptcha');
+    Route::post(':version/user/captcha/base', 'api/:version.User/sendCaptchaBase');
     //获取token
     Route::post(':version/token/user', 'api/:version.Token/getToken');
+    //删除token
+    Route::delete(':version/token/user', 'api/:version.Token/deleteToken');
     //通过新浪获取token
     Route::post(':version/token/user/sina', 'api/:version.Token/getTokenBySina');
     //通过qq获取token
