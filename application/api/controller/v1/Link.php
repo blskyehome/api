@@ -13,6 +13,7 @@ namespace app\api\controller\v1;
 use app\api\controller\BaseController;
 use app\api\controller\BaseUserController;
 use app\api\validate\IDMustBePositiveInt;
+use app\api\validate\LinksNew;
 use app\api\validate\Page;
 use app\api\validate\LinkNew;
 use app\api\validate\LinkUpdate;
@@ -27,7 +28,7 @@ use app\model\Category as CategoryModel;
 class Link extends BaseController
 {
     protected $beforeActionList = [
-        'checkExclusiveScope' => ['only' => 'createLink,getLinkByToken,deleteLink,updateLink,getUserLinkByCategoryIDAndToken,getLinkByCategory']
+        'checkExclusiveScope' => ['only' => 'createLink,createLinks,getLinkByToken,deleteLink,updateLink,getUserLinkByCategoryIDAndToken,getLinkByCategory']
     ];
 
     /**
@@ -41,6 +42,51 @@ class Link extends BaseController
         $link = new LinkModel();
         $data['user_id'] = $this->user_info->id;
         $res = $link->save($data);
+        if (!$res) {
+            throw new BaseException();
+        }
+        throw new SuccessMessage(
+            ['msg'=>$link]
+        );
+    }
+    /**
+     * 添加 多条link
+     */
+    public function createLinks()
+    {
+        $validate = new LinksNew();
+        $validate->goCheck();
+        $params = Request::instance()->param();
+        $category_id=$params['category_id'];
+        $link_list=$params['link_list'];
+        $data=[];
+        foreach ($link_list as $value){
+            if (key_exists('isChecked',$value)&&$value['isChecked']==true){
+                $tmp=[];
+                if (!key_exists('category_id',$value)){
+                    $tmp['category_id']=$category_id;
+                }else{
+                    $tmp['category_id']=$value['category_id'];
+                }
+                if (!key_exists('openness',$value)){
+                    $tmp['openness']=2;
+                }else{
+                    $tmp['openness']=$value['openness'];
+                }
+                if (!key_exists('comment',$value)){
+                    $tmp['comment']='批量导入';
+                }else{
+                    $tmp['comment']=$value['comment'];
+                }
+                $tmp['title']=$value['title'];
+                $tmp['url']=$value['url'];
+                $tmp['user_id'] = $this->user_info->id;
+                array_push($data,$tmp);
+            }
+        }
+        $link = new LinkModel();
+
+        $res = $link->saveAll($data);
         if (!$res) {
             throw new BaseException();
         }

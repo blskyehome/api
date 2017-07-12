@@ -57,6 +57,8 @@ Route::domain('api', function () {
 
     //创建link
     Route::post(':version/link', 'api/:version.Link/createLink');
+    Route::post(':version/links', 'api/:version.Link/createLinks');//导入多条link
+
 
     //获取link
     Route::get(':version/user/:user_id/link', 'api/:version.Link/getLink');//获取某个用户的公共link

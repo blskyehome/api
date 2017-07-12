@@ -52,6 +52,7 @@ class User extends BaseController
         if (!$result) {
             throw new BaseException();
         }
+
         //生成令牌
         $token=(new UserTokenService)->get(
             array(
@@ -60,6 +61,17 @@ class User extends BaseController
                 'password'=>input('post.password') //因为data['password']是加密的
             )
         );
+        //生成一个分类
+        $data = [
+            'name'=>'常用链接',
+            'description'=>'我经常用到的链接'
+        ];
+        $category_model = new Category();
+        $data['user_id'] = $user->id;
+        $res=$category_model->save($data);
+        if (!$res) {
+            throw new BaseException();
+        }
         throw new SuccessMessage(
             ['msg'=>array('ok',$token)]
         );
