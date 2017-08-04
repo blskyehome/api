@@ -173,3 +173,20 @@ function get_recent_months($month){
     }
     return $arr;
 }
+
+function is_file_exists($url)
+{
+    $ch = curl_init();
+    curl_setopt ($ch, CURLOPT_URL, $url);
+    //不下载
+    curl_setopt($ch, CURLOPT_NOBODY, 1);
+    //设置超时
+    curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 3);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+    curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    if($http_code == 200) {
+        return true;
+    }
+    return false;
+}
