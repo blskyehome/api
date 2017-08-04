@@ -15,6 +15,7 @@ use think\Route;
 
 //api
 Route::domain('api', function () {
+
     Route::get(':version/sample', 'api/:version.Sample/getSample');
     //Banner
     Route::get(':version/banner/:id', 'api/:version.Banner/getBanner');
